@@ -4,8 +4,14 @@ import javax.swing.JOptionPane;
 public class QuizApp {
 
     public static void main(String[] args) {
+        //Exibe a tela de seleção de lingua
+        GuiSelectIdioma guiIdioma = new GuiSelectIdioma();
+        String idioma = guiIdioma.idioma;
+
         // Exibe a tela de login
         GuiUser guiUser = new GuiUser(null);
+        guiUser.setIdioma(idioma);
+        
         String userName = guiUser.getUserName();
         String senha = guiUser.getSenha();
         boolean isTeacher = guiUser.isTeacher();
