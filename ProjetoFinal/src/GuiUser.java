@@ -10,6 +10,7 @@ public class GuiUser extends JDialog {
     private JRadioButton teacherButton;
     private JPasswordField passwordField;
     private JButton loginButton;
+    private String idioma = "";
 
     private static final String TEACHER_PASSWORD = "12345";
     private String userName;
@@ -127,6 +128,9 @@ public class GuiUser extends JDialog {
         setVisible(true);
     }
 
+    public void setIdioma(String idioma){
+        this.idioma = idioma;
+    }
     public String getUserName() {
         return userName;
     }
