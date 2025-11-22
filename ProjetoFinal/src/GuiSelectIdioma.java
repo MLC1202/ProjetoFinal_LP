@@ -4,7 +4,6 @@ public final class GuiSelectIdioma {
     String idioma;
 
     public GuiSelectIdioma(){
-        this.idioma = UserChoice();
     }
 
     public String UserChoice(){
@@ -28,7 +27,8 @@ public final class GuiSelectIdioma {
         );
         
         String op = ""+idiomas[escolha];
-
+        this.idioma = op;
+        
         return op;
     }
 }
