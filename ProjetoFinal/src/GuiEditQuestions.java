@@ -1,15 +1,18 @@
 import java.awt.*;
 import java.util.List;
 import javax.swing.*;
+import java.util.ResourceBundle;
 
 public class GuiEditQuestions extends JFrame {
     private JList<String> questionList;
     private DefaultListModel<String> questionListModel;
     private JButton addButton, editButton, removeButton;
     private List<Question> questions;
+    private ResourceBundle idioma = null;
 
-    public GuiEditQuestions() {
-        setTitle("Editar Perguntas");
+    public GuiEditQuestions(ResourceBundle idioma) {
+        this.idioma = idioma;
+        setTitle(idioma.getString("gui.editquestions.title"));
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -32,12 +35,12 @@ public class GuiEditQuestions extends JFrame {
         questionList.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
 
         JScrollPane scrollPane = new JScrollPane(questionList);
-        scrollPane.setBorder(BorderFactory.createTitledBorder("Perguntas Cadastradas"));
+        scrollPane.setBorder(BorderFactory.createTitledBorder(idioma.getString("gui.editquestions.storedq")));
 
         // Painel de botões
-        addButton = new JButton("Adicionar");
-        editButton = new JButton("Alterar");
-        removeButton = new JButton("Remover");
+        addButton = new JButton(idioma.getString("gui.editquestions.add"));
+        editButton = new JButton(idioma.getString("gui.editquestions.edit"));
+        removeButton = new JButton(idioma.getString("gui.editquestions.delete"));
 
         JButton[] botoes = { addButton, editButton, removeButton };
         for (JButton btn : botoes) {
@@ -91,7 +94,7 @@ public class GuiEditQuestions extends JFrame {
     private void editQuestion() {
         int selectedIndex = questionList.getSelectedIndex();
         if (selectedIndex == -1) {
-            JOptionPane.showMessageDialog(this, "Por favor, selecione uma pergunta para alterar.");
+            JOptionPane.showMessageDialog(this, idioma.getString("gui.editquestions.alterselect"));
             return;
         }
 
@@ -107,12 +110,12 @@ public class GuiEditQuestions extends JFrame {
     private void removeQuestion() {
         int selectedIndex = questionList.getSelectedIndex();
         if (selectedIndex == -1) {
-            JOptionPane.showMessageDialog(this, "Por favor, selecione uma pergunta para remover.");
+            JOptionPane.showMessageDialog(this, idioma.getString("gui.editquestions.deleteselect"));
             return;
         }
 
         Question selectedQuestion = questions.get(selectedIndex);
-        int confirm = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja remover esta pergunta?", "Confirmar Remoção", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this, idioma.getString("gui.editquestions.confirmdelete"), idioma.getString("gui.editquestions.confirmbtn"), JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             CrudBD.removeQuestion(selectedQuestion);
             loadQuestions();
@@ -120,6 +123,7 @@ public class GuiEditQuestions extends JFrame {
     }
 
     public static void main(String[] args) {
-        new GuiEditQuestions();
+        ResourceBundle idioma = null;
+        new GuiEditQuestions(idioma);
     }
 }

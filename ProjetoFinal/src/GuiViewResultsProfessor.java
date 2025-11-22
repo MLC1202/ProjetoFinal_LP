@@ -4,13 +4,16 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
+import java.util.ResourceBundle;
 
 public class GuiViewResultsProfessor extends JFrame {
     private JTable resultsTable;
     private JScrollPane scrollPane;
+    private ResourceBundle idioma = null;
 
-    public GuiViewResultsProfessor() {
-        setTitle("Resultados dos Quizzes");
+    public GuiViewResultsProfessor(ResourceBundle idioma) {
+        this.idioma = idioma;
+        setTitle(idioma.getString("gui.viewresultsprofessor.title"));
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -25,11 +28,11 @@ public class GuiViewResultsProfessor extends JFrame {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         // Tabela de resultados
-        String[] columnNames = {"Aluno", "Quiz", "Pontuação"};
+        String[] columnNames = {idioma.getString("gui.viewresultsprofessor.student"), "Quiz", idioma.getString("gui.viewresults.points")};
         List<String[]> results = CrudBD.getResults(); // Recupera os resultados do banco de dados
         
         if (results.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nenhum resultado encontrado.");
+            JOptionPane.showMessageDialog(this, idioma.getString("gui.viewresultsprofessor.noresults"));
             return;
         }
 

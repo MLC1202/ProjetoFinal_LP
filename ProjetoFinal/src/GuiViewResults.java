@@ -3,13 +3,16 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
+import java.util.ResourceBundle;
 
 public class GuiViewResults extends JFrame {
     private JTable resultsTable;
     private JScrollPane scrollPane;
+    private ResourceBundle idioma = null;
 
-    public GuiViewResults(List<String[]> results) {
-        setTitle("Meus Resultados");
+    public GuiViewResults(List<String[]> results, ResourceBundle idioma) {
+        this.idioma = idioma;
+        setTitle(idioma.getString("gui.viewresults.title"));
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -20,7 +23,7 @@ public class GuiViewResults extends JFrame {
 
         // Verifica se há resultados
         if (results.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Você ainda não possui resultados.");
+            JOptionPane.showMessageDialog(this, idioma.getString("gui.viewresults.noresults"));
             return;
         }
 
@@ -30,7 +33,7 @@ public class GuiViewResults extends JFrame {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         // Tabela de resultados
-        String[] columnNames = {"Quiz", "Pontuação"};
+        String[] columnNames = {"Quiz", idioma.getString("gui.viewresults.points")};
         String[][] data = results.toArray(new String[0][]);
 
         // Coloca resultados no txt

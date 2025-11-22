@@ -2,12 +2,14 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 import javax.swing.*;
+import java.util.ResourceBundle;
 
 public class GuiQuestions extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainPanel;
     private JPanel quizPanel;
     private JPanel questionPanel;
+    private ResourceBundle idioma = null;
 
     private List<Question> questions;
     private int currentQuestionIndex = 0;
@@ -21,11 +23,12 @@ public class GuiQuestions extends JFrame {
     private final int TIME_LIMIT = 40; // segundos por pergunta
     private JLabel timerLabel;
 
-    public GuiQuestions(List<Question> questions, User user) {
+    public GuiQuestions(List<Question> questions, User user, ResourceBundle idioma) {
         this.questions = questions;
         this.user = user;
+        setIdioma(idioma);
 
-        setTitle("Quiz App");
+        setTitle(idioma.getString("gui.questions.title"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 400);
         setLocationRelativeTo(null);
@@ -73,7 +76,7 @@ public class GuiQuestions extends JFrame {
         optionsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Timer label
-        timerLabel = new JLabel("Tempo: " + TIME_LIMIT + "s");
+        timerLabel = new JLabel(idioma.getString("gui.questions.time") + ": " + TIME_LIMIT + "s");
         timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         questionPanel.add(Box.createVerticalStrut(10));
         questionPanel.add(timerLabel);
@@ -84,10 +87,10 @@ public class GuiQuestions extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 long elapsed = (System.currentTimeMillis() - startTime) / 1000;
                 int remaining = TIME_LIMIT - (int) elapsed;
-                timerLabel.setText("Tempo: " + remaining + "s");
+                timerLabel.setText(idioma.getString("gui.questions.time") + ": " + remaining + "s");
                 if (remaining <= 0) {
                     timer.stop();
-                    JOptionPane.showMessageDialog(GuiQuestions.this, "Tempo esgotado!");
+                    JOptionPane.showMessageDialog(GuiQuestions.this, idioma.getString("gui.questions.time.expired"));
                     currentQuestionIndex++;
                     showNextQuestion();
                 }
@@ -125,10 +128,10 @@ public class GuiQuestions extends JFrame {
                 if (q.isCorrect(answer)) {
                     // Pontuação: 1000 - (tempo gasto em segundos * 1000 / TIME_LIMIT)
                     score = Math.max(0, 1000 - (int)((elapsedMillis * 1000) / (TIME_LIMIT * 1000)));
-                    JOptionPane.showMessageDialog(this, "Resposta correta!\nPontuação: " + score);
+                    JOptionPane.showMessageDialog(this, idioma.getString("gui.questions.correct.score") + score);
                     acertos ++;
                 } else {
-                    JOptionPane.showMessageDialog(this, "Resposta incorreta.\nPontuação: 0");
+                    JOptionPane.showMessageDialog(this, idioma.getString("gui.questions.incorrect.score"));
                 }
                 totalScore += score;
                 currentQuestionIndex++;
@@ -147,16 +150,20 @@ public class GuiQuestions extends JFrame {
 
     public void finishQuiz(int studentName, String quizName, int totalScore) {
         CrudBD.saveResult(studentName, quizName, totalScore);
-        JOptionPane.showMessageDialog(this, "Quiz finalizado! Sua pontuação: " + totalScore + " de 1000 ");
+        JOptionPane.showMessageDialog(this, idioma.getString("gui.questions.finished") + totalScore + " "+idioma.getString("gui.questions.score.final"));
     }
 
     private void endQuiz() {
-        String quizName = "Quiz Configurado";
+        String quizName = idioma.getString("gui.questions.qconfigured");
         int studentName = user.getUser_id();
 
         totalScore = totalScore / acertos;
 
         finishQuiz(studentName, quizName, totalScore);
         dispose();
+    }
+
+        public void setIdioma(ResourceBundle idioma){
+        this.idioma = idioma;
     }
 }

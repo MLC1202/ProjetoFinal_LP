@@ -19,7 +19,7 @@ public final class GuiUser extends JDialog {
     private boolean isTeacher;
 
     public GuiUser(Frame parent, ResourceBundle idioma) {
-        super(parent, "Cadastro de Usuário", true);
+        super(parent, idioma.getString("gui.user.title"), true);
         setIdioma(idioma);
         setSize(450, 350);
         setLocationRelativeTo(parent);
@@ -34,7 +34,7 @@ public final class GuiUser extends JDialog {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
         mainPanel.setBackground(fundo);
 
-        JLabel observacaoLabel = new JLabel("<html><b>Cadastro:</b> Digite seu nome, senha e selecione seu perfil.</html>");
+        JLabel observacaoLabel = new JLabel(idioma.getString("gui.user.instruction"));
         observacaoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
         // Painel de campos
@@ -47,8 +47,8 @@ public final class GuiUser extends JDialog {
         passwordField = new JPasswordField();
         passwordField.setFont(fonte);
 
-        studentButton = new JRadioButton("Aluno");
-        teacherButton = new JRadioButton("Professor");
+        studentButton = new JRadioButton(idioma.getString("gui.user.student"));
+        teacherButton = new JRadioButton(idioma.getString("gui.user.teacher"));
 
         studentButton.setBackground(fundo);
         teacherButton.setBackground(fundo);
@@ -60,9 +60,9 @@ public final class GuiUser extends JDialog {
         group.add(teacherButton);
 
         // Adiciona os componentes
-        fieldsPanel.add(new JLabel("Nome:", SwingConstants.LEFT));
+        fieldsPanel.add(new JLabel(idioma.getString("gui.user.name") + ": ", SwingConstants.LEFT));
         fieldsPanel.add(nameField);
-        fieldsPanel.add(new JLabel("Senha:", SwingConstants.LEFT));
+        fieldsPanel.add(new JLabel(idioma.getString("gui.user.password") + ": ", SwingConstants.LEFT));
         fieldsPanel.add(passwordField);
 
         JPanel rolePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -71,7 +71,7 @@ public final class GuiUser extends JDialog {
         rolePanel.add(teacherButton);
         fieldsPanel.add(rolePanel);
 
-        loginButton = new JButton("Entrar");
+        loginButton = new JButton(idioma.getString("gui.user.enter"));
         loginButton.setFont(fonte);
         loginButton.setBackground(botao);
         loginButton.setFocusPainted(false);
@@ -104,20 +104,20 @@ public final class GuiUser extends JDialog {
                 }
 
                 if (name.isEmpty() || senhaInput.isEmpty()) {
-                    JOptionPane.showMessageDialog(GuiUser.this, "Por favor, insira nome e senha.");
+                    JOptionPane.showMessageDialog(GuiUser.this, idioma.getString("gui.user.invalid.empty"));
                     return;
                 }
 
                 if (teacherButton.isSelected()) {
                     if (!senhaInput.equals(TEACHER_PASSWORD) && !teacherName) {
-                        JOptionPane.showMessageDialog(GuiUser.this, "Login de professor inválido.");
+                        JOptionPane.showMessageDialog(GuiUser.this, idioma.getString("gui.user.invalid.teacher"));
                         return;
                     }
                     isTeacher = true;
                 } else if (studentButton.isSelected()) {
                     isTeacher = false;
                 } else {
-                    JOptionPane.showMessageDialog(GuiUser.this, "Por favor, selecione se você é Aluno ou Professor.");
+                    JOptionPane.showMessageDialog(GuiUser.this, idioma.getString("gui.user.invalid.role"));
                     return;
                 }
 

@@ -6,9 +6,11 @@ public class GuiCentralProfessor extends JFrame {
     private JButton manageQuestionsButton;
     private JButton setQuizButton;
     private JButton viewResultsButton;
+    private ResourceBundle idioma = null;
 
     public GuiCentralProfessor(ResourceBundle idioma) {
-        setTitle("Central do Professor");
+        this.idioma = idioma;
+        setTitle(idioma.getString("gui.central.professor.title"));
         setSize(500, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -23,7 +25,7 @@ public class GuiCentralProfessor extends JFrame {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
         mainPanel.setBackground(fundo);
 
-        JLabel titleLabel = new JLabel("Painel do Professor", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel(idioma.getString("gui.central.professor.painel"), SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
         titleLabel.setForeground(new Color(50, 50, 50));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
@@ -32,9 +34,9 @@ public class GuiCentralProfessor extends JFrame {
         JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 15, 15));
         buttonPanel.setBackground(fundo);
 
-        manageQuestionsButton = criarBotao("Gerenciar Perguntas", fonte, corBotao);
-        setQuizButton = criarBotao("Configurar Quiz", fonte, corBotao);
-        viewResultsButton = criarBotao("Ver Resultados", fonte, corBotao);
+        manageQuestionsButton = criarBotao(idioma.getString("gui.central.professor.qmanager"), fonte, corBotao);
+        setQuizButton = criarBotao(idioma.getString("gui.central.professor.qconfigure"), fonte, corBotao);
+        viewResultsButton = criarBotao(idioma.getString("gui.central.professor.viewresults"), fonte, corBotao);
 
         buttonPanel.add(manageQuestionsButton);
         buttonPanel.add(setQuizButton);
@@ -64,7 +66,7 @@ public class GuiCentralProfessor extends JFrame {
     }
 
     private void openManageQuestions() {
-        new GuiEditQuestions();
+        new GuiEditQuestions(idioma);
     }
 
     private void openSetQuiz() {
@@ -72,10 +74,11 @@ public class GuiCentralProfessor extends JFrame {
     }
 
     private void openViewResults() {
-        new GuiViewResultsProfessor();
+        new GuiViewResultsProfessor(idioma);
     }
 
     public static void main(String[] args) {
-        new GuiCentralProfessor();
+        ResourceBundle idioma = null;
+        new GuiCentralProfessor(idioma);
     }
 }

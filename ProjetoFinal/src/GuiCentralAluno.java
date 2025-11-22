@@ -9,11 +9,12 @@ public class GuiCentralAluno extends JFrame {
     private JButton playQuizButton;
     private JButton viewResultsButton;
     private User user;
+    private ResourceBundle idioma = null;
 
     public GuiCentralAluno(User user, ResourceBundle idioma) {
         this.user = user;
-
-        setTitle("Central do Aluno - " + user.getName());
+        setIdioma(idioma);
+        setTitle(idioma.getString("gui.central.aluno.title")+ " - " + user.getName());
         setSize(500, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -29,7 +30,7 @@ public class GuiCentralAluno extends JFrame {
         mainPanel.setBackground(backgroundColor);
 
         // Título
-        JLabel titleLabel = new JLabel("Bem-vindo, " + user.getName());
+        JLabel titleLabel = new JLabel(idioma.getString("gui.central.aluno.welcome") + ", " + user.getName());
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         titleLabel.setForeground(new Color(50, 50, 50));
@@ -39,9 +40,9 @@ public class GuiCentralAluno extends JFrame {
         JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 15, 15));
         buttonPanel.setBackground(backgroundColor);
 
-        playRandomButton = criarBotao("Jogar com 10 Perguntas Aleatórias", font, buttonColor);
-        playQuizButton = criarBotao("Jogar Quiz do Professor", font, buttonColor);
-        viewResultsButton = criarBotao("Ver Meus Resultados", font, buttonColor);
+        playRandomButton = criarBotao(idioma.getString("gui.central.aluno.randomq"), font, buttonColor);
+        playQuizButton = criarBotao(idioma.getString("gui.central.aluno.professorq"), font, buttonColor);
+        viewResultsButton = criarBotao(idioma.getString("gui.central.aluno.results"), font, buttonColor);
 
         buttonPanel.add(playRandomButton);
         buttonPanel.add(playQuizButton);
@@ -74,24 +75,24 @@ public class GuiCentralAluno extends JFrame {
     private void playRandomQuiz() {
         List<Question> questions = CrudBD.getRandomQuestions(10);
         if (questions.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Não há perguntas suficientes no banco de dados.");
+            JOptionPane.showMessageDialog(this, idioma.getString("gui.central.aluno.noteoughq"));
             return;
         }
-        new GuiQuestions(questions, user);
+        new GuiQuestions(questions, user, idioma);
     }
 
     private void playProfessorQuiz() {
         List<String[]> quizzes = CrudBD.getAllQuizzes();
         if (quizzes.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nenhum quiz configurado pelo professor no momento.");
+            JOptionPane.showMessageDialog(this, idioma.getString("gui.central.aluno.noqconfigured"));
             return;
         }
 
         String[] quizNames = quizzes.stream().map(q -> q[1]).toArray(String[]::new);
         String selectedQuiz = (String) JOptionPane.showInputDialog(
                 this,
-                "Selecione um quiz para jogar:",
-                "Quizzes Disponíveis",
+                idioma.getString("gui.central.aluno.selectquiz"),
+                idioma.getString("gui.central.aluno.qselection"),
                 JOptionPane.PLAIN_MESSAGE,
                 null,
                 quizNames,
@@ -107,17 +108,17 @@ public class GuiCentralAluno extends JFrame {
 
         List<Question> questions = CrudBD.getQuizQuestions(quizId);
         if (questions.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "O quiz selecionado não possui perguntas.");
+            JOptionPane.showMessageDialog(this, idioma.getString("gui.central.aluno.noquestions"));
             return;
         }
 
-        new GuiQuestions(questions, user);
+        new GuiQuestions(questions, user, idioma);
     }
 
     private void viewResults() {
         List<String[]> results = CrudBD.getStudentResults(user.getUser_id());
         if (results.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Você ainda não possui resultados.");
+            JOptionPane.showMessageDialog(this, idioma.getString("gui.central.aluno.noreults"));
             return;
         }
 
@@ -127,11 +128,16 @@ public class GuiCentralAluno extends JFrame {
         writer.addResults(results);
         writer.closeFile();
 
-        new GuiViewResults(results);
+        new GuiViewResults(results, idioma);
     }
 
     public static void main(String[] args) {
         User user = new User("Aluno Teste", "1234");
-        new GuiCentralAluno(user);
+        ResourceBundle idioma = null;
+        new GuiCentralAluno(user, idioma);
+    }
+
+    public void setIdioma(ResourceBundle idioma){
+    this.idioma = idioma;
     }
 }
