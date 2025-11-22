@@ -1,24 +1,26 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 import javax.swing.*;
 
-public class GuiUser extends JDialog {
+public final class GuiUser extends JDialog {
 
     private JTextField nameField;
     private JRadioButton studentButton;
     private JRadioButton teacherButton;
     private JPasswordField passwordField;
     private JButton loginButton;
-    private String idioma = "";
+    private ResourceBundle idioma = null;
 
     private static final String TEACHER_PASSWORD = "12345";
     private String userName;
     private String senha;
     private boolean isTeacher;
 
-    public GuiUser(Frame parent) {
+    public GuiUser(Frame parent, ResourceBundle idioma) {
         super(parent, "Cadastro de Usuário", true);
+        setIdioma(idioma);
         setSize(450, 350);
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -128,7 +130,7 @@ public class GuiUser extends JDialog {
         setVisible(true);
     }
 
-    public void setIdioma(String idioma){
+    public void setIdioma(ResourceBundle idioma){
         this.idioma = idioma;
     }
     public String getUserName() {

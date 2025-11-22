@@ -1,6 +1,7 @@
 import Arquivos.CriaTxtE;
 import java.awt.*;
 import java.util.List;
+import java.util.ResourceBundle;
 import javax.swing.*;
 
 public class GuiCentralAluno extends JFrame {
@@ -9,7 +10,7 @@ public class GuiCentralAluno extends JFrame {
     private JButton viewResultsButton;
     private User user;
 
-    public GuiCentralAluno(User user) {
+    public GuiCentralAluno(User user, ResourceBundle idioma) {
         this.user = user;
 
         setTitle("Central do Aluno - " + user.getName());

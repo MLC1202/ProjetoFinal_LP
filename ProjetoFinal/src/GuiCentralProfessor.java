@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.ResourceBundle;
 import javax.swing.*;
 
 public class GuiCentralProfessor extends JFrame {
@@ -6,7 +7,7 @@ public class GuiCentralProfessor extends JFrame {
     private JButton setQuizButton;
     private JButton viewResultsButton;
 
-    public GuiCentralProfessor() {
+    public GuiCentralProfessor(ResourceBundle idioma) {
         setTitle("Central do Professor");
         setSize(500, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
