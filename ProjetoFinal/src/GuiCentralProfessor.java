@@ -70,7 +70,7 @@ public class GuiCentralProfessor extends JFrame {
     }
 
     private void openSetQuiz() {
-        new GuiSetQuiz();
+        new GuiSetQuiz(idioma);
     }
 
     private void openViewResults() {

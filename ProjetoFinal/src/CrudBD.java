@@ -1,6 +1,8 @@
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class CrudBD {
 
@@ -105,9 +107,20 @@ public class CrudBD {
     ////
 
     //// QUESTIONS
-    public static List<Question> getQuestions() {
+    public static List<Question> getQuestions(ResourceBundle idioma) {
+        Locale locale = idioma.getLocale();
+
+        String choice = switch (locale.getLanguage()) {
+            case "pt" -> "questions_pt";
+            case "en" -> "questions_en";
+            case "es" -> "questions_es";
+            case "fr" -> "questions_fr";
+            case "it" -> "questions_it";
+            default -> "questions_pt";
+        };
+        
         List<Question> questions = new ArrayList<>();
-        String sql = "SELECT * FROM questions";
+        String sql = "SELECT * FROM "+choice;
     
         try (Connection conn = ConnFactory.getConnection();
              Statement stmt = conn.createStatement();
@@ -132,8 +145,19 @@ public class CrudBD {
         return questions;
     }
     
-    public static void addQuestion(Question question) {
-        String sql = "INSERT INTO questions (question, optionA, optionB, optionC, optionD, correctOption) VALUES (?, ?, ?, ?, ?, ?)";
+    public static void addQuestion(Question question, ResourceBundle idioma) {
+        Locale locale = idioma.getLocale();
+
+        String choice = switch (locale.getLanguage()) {
+            case "pt" -> "questions_pt";
+            case "en" -> "questions_en";
+            case "es" -> "questions_es";
+            case "fr" -> "questions_fr";
+            case "it" -> "questions_it";
+            default -> "questions_pt";
+        };
+
+        String sql = "INSERT INTO "+choice+"(question, optionA, optionB, optionC, optionD, correctOption) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -151,8 +175,19 @@ public class CrudBD {
         }
     }
 
-    public static void updateQuestion(Question question) {
-        String sql = "UPDATE questions SET optionA = ?, optionB = ?, optionC = ?, optionD = ?, correctOption = ? WHERE question = ?";
+    public static void updateQuestion(Question question, ResourceBundle idioma) {
+        Locale locale = idioma.getLocale();
+
+        String choice = switch (locale.getLanguage()) {
+            case "pt" -> "questions_pt";
+            case "en" -> "questions_en";
+            case "es" -> "questions_es";
+            case "fr" -> "questions_fr";
+            case "it" -> "questions_it";
+            default -> "questions_pt";
+        };
+
+        String sql = "UPDATE "+choice+" SET optionA = ?, optionB = ?, optionC = ?, optionD = ?, correctOption = ? WHERE question = ?";
 
         try (Connection conn = ConnFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -185,8 +220,19 @@ public class CrudBD {
     }
 
     //Método Get ID
-    public static int getId(String questionText) {
-        String sql = "SELECT id FROM questions WHERE question = ?";
+    public static int getId(String questionText, ResourceBundle idioma) {
+        Locale locale = idioma.getLocale();
+
+        String choice = switch (locale.getLanguage()) {
+            case "pt" -> "questions_pt";
+            case "en" -> "questions_en";
+            case "es" -> "questions_es";
+            case "fr" -> "questions_fr";
+            case "it" -> "questions_it";
+            default -> "questions_pt";
+        };
+
+        String sql = "SELECT id FROM "+choice+" WHERE question = ?";
         try (Connection conn = ConnFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
     
@@ -203,9 +249,20 @@ public class CrudBD {
         return -1; // Retorna -1 se a pergunta não for encontrada
     }
 
-    public static List<Question> getRandomQuestions(int limit) {
+    public static List<Question> getRandomQuestions(int limit, ResourceBundle idioma) {
+        Locale locale = idioma.getLocale();
+
+        String choice = switch (locale.getLanguage()) {
+            case "pt" -> "questions_pt";
+            case "en" -> "questions_en";
+            case "es" -> "questions_es";
+            case "fr" -> "questions_fr";
+            case "it" -> "questions_it";
+            default -> "questions_pt";
+        };
+
         List<Question> questions = new ArrayList<>();
-        String sql = "SELECT * FROM questions ORDER BY RAND() LIMIT ?";
+        String sql = "SELECT * FROM "+choice+" ORDER BY RAND() LIMIT ?";
     
         try (Connection conn = ConnFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

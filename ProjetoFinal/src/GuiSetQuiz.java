@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import javax.swing.*;
 
 public class GuiSetQuiz extends JFrame {
@@ -11,7 +12,8 @@ public class GuiSetQuiz extends JFrame {
     private JPanel questionsPanel;
     private List<JCheckBox> questionCheckBoxes;
 
-    public GuiSetQuiz() {
+
+    public GuiSetQuiz(ResourceBundle idioma) {
         setTitle("Configurar Quiz");
         setSize(500, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

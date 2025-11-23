@@ -45,12 +45,14 @@ public final class GuiSelectIdioma {
         choice = switch (this.idioma) {
             case "Português" -> ResourceBundle.getBundle("messages", new Locale("pt", "BR"));
             case "Inglês" -> ResourceBundle.getBundle("messages", Locale.US);
-            case "Espanhol" -> ResourceBundle.getBundle("messages", new Locale("es", "SP"));
-            case "Francês" -> ResourceBundle.getBundle("messages", Locale.FRENCH);
-            case "Italiano" -> ResourceBundle.getBundle("messages", Locale.ITALIAN);
+            case "Espanhol" -> ResourceBundle.getBundle("messages", new Locale("es", "ES"));
+            case "Francês" -> ResourceBundle.getBundle("messages", new Locale("fr", "FR"));
+            case "Italiano" -> ResourceBundle.getBundle("messages", new Locale("it", "IT"));
             default -> ResourceBundle.getBundle("messages");
         };
         
+
+
         this.properties = choice;
 
         return choice;

@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.util.List;
-import javax.swing.*;
 import java.util.ResourceBundle;
+import javax.swing.*;
 
 public class GuiEditQuestions extends JFrame {
     private JList<String> questionList;
@@ -75,7 +75,7 @@ public class GuiEditQuestions extends JFrame {
     }
 
     private void loadQuestions() {
-        questions = CrudBD.getQuestions();
+        questions = CrudBD.getQuestions(this.idioma);
         questionListModel.clear();
         for (Question question : questions) {
             questionListModel.addElement(question.getQuestion());
@@ -86,7 +86,7 @@ public class GuiEditQuestions extends JFrame {
         QuestionForm form = new QuestionForm(this, null);
         Question newQuestion = form.getQuestion();
         if (newQuestion != null) {
-            CrudBD.addQuestion(newQuestion);
+            CrudBD.addQuestion(newQuestion, this.idioma);
             loadQuestions();
         }
     }
@@ -102,7 +102,7 @@ public class GuiEditQuestions extends JFrame {
         QuestionForm form = new QuestionForm(this, selectedQuestion);
         Question updatedQuestion = form.getQuestion();
         if (updatedQuestion != null) {
-            CrudBD.updateQuestion(updatedQuestion);
+            CrudBD.updateQuestion(updatedQuestion, this.idioma);
             loadQuestions();
         }
     }

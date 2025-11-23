@@ -43,7 +43,6 @@ public class QuizApp {
 
         // Fluxo para professores
         if (isTeacher) {
-            JOptionPane.showMessageDialog(null, "Bem-vindo, Professor " + user.getName() + "!");
             JOptionPane.showMessageDialog(null, idioma.getString("welcome.teacher")+" "+user.getName() + "!");
             new GuiCentralProfessor(idioma);
             return;
