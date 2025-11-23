@@ -31,7 +31,6 @@ public class QuizApp {
             User existente = CrudBD.getUser(userName); // Esse método busca só pelo nome
             System.out.println(idioma.getString("login.exists") + existente);
             if (existente != null) {
-                JOptionPane.showMessageDialog(null, "Erro: O nome de usuário já existe com uma senha diferente.");
                 JOptionPane.showMessageDialog(null, idioma.getString("error.user.exists"));
                 return; // Encerra o programa ou retorna ao fluxo de login
             }

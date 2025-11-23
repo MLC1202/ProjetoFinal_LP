@@ -339,9 +339,14 @@ DROP TABLE IF EXISTS quiz_questions;
 CREATE TABLE quiz_questions (
     quiz_id INT NOT NULL,
     question_id INT NOT NULL,
-    FOREIGN KEY (quiz_id) REFERENCES quizzes(id),
-    FOREIGN KEY (question_id) REFERENCES questions(id)
+    
+    -- Mantemos a FK do quiz, pois a tabela 'quizzes' existe
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
+    
+    -- APAGAMOS a linha abaixo. O MySQL não vai mais verificar se a pergunta existe.
+    -- FOREIGN KEY (question_id) REFERENCES questions(id) 
 );
+
 
 -- Tabela de resultados (corrigida)
 DROP TABLE IF EXISTS results;
@@ -355,7 +360,8 @@ CREATE TABLE results (
 
 -- Consultas para verificação
 SELECT * FROM users;
-SELECT * FROM questions;
+SELECT * FROM questions_pt; -- <-- Use uma tabela específica para testar
+SELECT * FROM questions_fr;
 SELECT * FROM quizzes;
 SELECT * FROM results;
-DESCRIBE questions;
+DESCRIBE questions_pt;      -- <-- Use uma tabel

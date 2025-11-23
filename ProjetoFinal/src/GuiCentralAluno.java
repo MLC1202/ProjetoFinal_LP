@@ -73,7 +73,7 @@ public class GuiCentralAluno extends JFrame {
     }
 
     private void playRandomQuiz() {
-        List<Question> questions = CrudBD.getRandomQuestions(10);
+        List<Question> questions = CrudBD.getRandomQuestions(10, this.idioma);
         if (questions.isEmpty()) {
             JOptionPane.showMessageDialog(this, idioma.getString("gui.central.aluno.noteoughq"));
             return;
