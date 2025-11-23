@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.*;
+import java.util.ResourceBundle;
 
 public class GuiSetQuiz extends JFrame {
     private JTextField quizNameField;
@@ -11,10 +12,12 @@ public class GuiSetQuiz extends JFrame {
     private List<Question> selectedQuestions;
     private JPanel questionsPanel;
     private List<JCheckBox> questionCheckBoxes;
+    private ResourceBundle idioma = null;
 
 
     public GuiSetQuiz(ResourceBundle idioma) {
-        setTitle("Configurar Quiz");
+        this.idioma = idioma;
+        setTitle(idioma.getString("gui.setquiz.title"));
         setSize(500, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -31,7 +34,7 @@ public class GuiSetQuiz extends JFrame {
         // Campo para o nome do quiz
         JPanel topPanel = new JPanel(new BorderLayout(5, 5));
         topPanel.setBackground(fundo);
-        JLabel quizNameLabel = new JLabel("Nome do Quiz:");
+        JLabel quizNameLabel = new JLabel(idioma.getString("gui.setquiz.qname"));
         quizNameLabel.setFont(fonte);
 
         quizNameField = new JTextField();
@@ -49,11 +52,11 @@ public class GuiSetQuiz extends JFrame {
         questionsPanel.setBackground(fundo);
 
         JScrollPane scrollPane = new JScrollPane(questionsPanel);
-        scrollPane.setBorder(BorderFactory.createTitledBorder("Selecione as perguntas"));
+        scrollPane.setBorder(BorderFactory.createTitledBorder(idioma.getString("gui.setquiz.qselection")));
         scrollPane.getViewport().setBackground(fundo);
 
         // Botão salvar
-        saveQuizButton = new JButton("Salvar Quiz");
+        saveQuizButton = new JButton(idioma.getString("gui.setquiz.saveq"));
         saveQuizButton.setFont(fonte);
         saveQuizButton.setBackground(botao);
         saveQuizButton.setFocusPainted(false);
@@ -78,7 +81,7 @@ public class GuiSetQuiz extends JFrame {
     }
 
     private void loadQuestions() {
-        questions = CrudBD.getQuestions();
+        questions = CrudBD.getQuestions(idioma);
         questionsPanel.removeAll();
         questionCheckBoxes = new ArrayList<>();
 
@@ -99,7 +102,7 @@ public class GuiSetQuiz extends JFrame {
     private void saveQuiz() {
         String quizName = quizNameField.getText().trim();
         if (quizName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, insira um nome para o quiz.");
+            JOptionPane.showMessageDialog(this, idioma.getString("gui.setquiz.noname"));
             return;
         }
 
@@ -111,12 +114,12 @@ public class GuiSetQuiz extends JFrame {
         }
 
         if (selectedQuestions.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, selecione pelo menos uma pergunta para o quiz.");
+            JOptionPane.showMessageDialog(this, idioma.getString("gui.setquiz.noquestions"));
             return;
         }
 
         CrudBD.saveQuiz(quizName, selectedQuestions);
-        JOptionPane.showMessageDialog(this, "Quiz '" + quizName + "' salvo com sucesso!");
+        JOptionPane.showMessageDialog(this, "Quiz '" + quizName + idioma.getString(" gui.setquiz.confirmation"));
         dispose();
     }
 }
