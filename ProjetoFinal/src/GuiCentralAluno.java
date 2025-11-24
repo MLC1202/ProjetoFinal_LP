@@ -8,56 +8,64 @@ public class GuiCentralAluno extends JFrame {
     private JButton playRandomButton;
     private JButton playQuizButton;
     private JButton viewResultsButton;
+    private JButton onlineUsersButton;
+    private JButton globalChatButton;
     private User user;
     private ResourceBundle idioma = null;
+    private ChatClient chatClient;
 
-    public GuiCentralAluno(User user, ResourceBundle idioma) {
+    public GuiCentralAluno(User user, ResourceBundle idioma, ChatClient chatClient) {
         this.user = user;
+        this.chatClient = chatClient;
         setIdioma(idioma);
-        setTitle(idioma.getString("gui.central.aluno.title")+ " - " + user.getName());
-        setSize(500, 300);
+        setTitle(idioma.getString("gui.central.aluno.title") + " - " + user.getName());
+        setSize(500, 350);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Fonte e cor padrão para aparência moderna
         Font font = new Font("Segoe UI", Font.PLAIN, 16);
         Color backgroundColor = new Color(245, 245, 245);
         Color buttonColor = new Color(230, 230, 230);
 
-        // Painel principal com margem
         JPanel mainPanel = new JPanel(new BorderLayout(0, 20));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
         mainPanel.setBackground(backgroundColor);
 
-        // Título
         JLabel titleLabel = new JLabel(idioma.getString("gui.central.aluno.welcome") + ", " + user.getName());
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         titleLabel.setForeground(new Color(50, 50, 50));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // Painel de botões
-        JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 15, 15));
+        JPanel buttonPanel = new JPanel(new GridLayout(5, 1, 15, 15));
         buttonPanel.setBackground(backgroundColor);
 
         playRandomButton = criarBotao(idioma.getString("gui.central.aluno.randomq"), font, buttonColor);
         playQuizButton = criarBotao(idioma.getString("gui.central.aluno.professorq"), font, buttonColor);
         viewResultsButton = criarBotao(idioma.getString("gui.central.aluno.results"), font, buttonColor);
+        onlineUsersButton = criarBotao("Usuários online", font, buttonColor);
+        globalChatButton = criarBotao("Chat global", font, buttonColor);
 
         buttonPanel.add(playRandomButton);
         buttonPanel.add(playQuizButton);
         buttonPanel.add(viewResultsButton);
+        buttonPanel.add(onlineUsersButton);
+        buttonPanel.add(globalChatButton);
 
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
-
         add(mainPanel);
 
-        // Listeners
         playRandomButton.addActionListener(e -> playRandomQuiz());
         playQuizButton.addActionListener(e -> playProfessorQuiz());
         viewResultsButton.addActionListener(e -> viewResults());
+        onlineUsersButton.addActionListener(e -> showOnlineUsers());
+        globalChatButton.addActionListener(e -> openGlobalChat());
 
         setVisible(true);
+    }
+
+    public GuiCentralAluno(User user, ResourceBundle idioma) {
+        this(user, idioma, null);
     }
 
     private JButton criarBotao(String texto, Font fonte, Color corFundo) {
@@ -66,8 +74,8 @@ public class GuiCentralAluno extends JFrame {
         botao.setBackground(corFundo);
         botao.setFocusPainted(false);
         botao.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 200, 200)),
-            BorderFactory.createEmptyBorder(10, 20, 10, 20)
+                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)
         ));
         return botao;
     }
@@ -78,10 +86,11 @@ public class GuiCentralAluno extends JFrame {
             JOptionPane.showMessageDialog(this, idioma.getString("gui.central.aluno.noteoughq"));
             return;
         }
-        new GuiQuestions(questions, user, idioma);
+         new GuiQuestions(questions, user, idioma);
     }
 
-    private void playProfessorQuiz() {
+
+ private void playProfessorQuiz() {
         List<String[]> quizzes = CrudBD.getAllQuizzes();
         if (quizzes.isEmpty()) {
             JOptionPane.showMessageDialog(this, idioma.getString("gui.central.aluno.noqconfigured"));
@@ -114,8 +123,7 @@ public class GuiCentralAluno extends JFrame {
 
         new GuiQuestions(questions, user, idioma);
     }
-
-    private void viewResults() {
+   private void viewResults() {
         List<String[]> results = CrudBD.getStudentResults(user.getUser_id());
         if (results.isEmpty()) {
             JOptionPane.showMessageDialog(this, idioma.getString("gui.central.aluno.noreults"));
@@ -131,6 +139,24 @@ public class GuiCentralAluno extends JFrame {
         new GuiViewResults(results, idioma);
     }
 
+    private void showOnlineUsers() {
+        if (chatClient != null) {
+            chatClient.showOnlineUsers();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Chat não disponível (cliente não conectado).");
+        }
+    }
+
+    private void openGlobalChat() {
+        if (chatClient != null) {
+            chatClient.openChatWindow();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Chat não disponível (cliente não conectado).");
+        }
+    }
+
     public static void main(String[] args) {
         User user = new User("Aluno Teste", "1234");
         ResourceBundle idioma = null;
@@ -138,6 +164,6 @@ public class GuiCentralAluno extends JFrame {
     }
 
     public void setIdioma(ResourceBundle idioma){
-    this.idioma = idioma;
+        this.idioma = idioma;
     }
 }

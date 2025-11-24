@@ -93,7 +93,7 @@ public final class GuiUser extends JDialog {
                 String name = nameField.getText().trim();
                 String senhaInput = new String(passwordField.getPassword()).trim();
 
-                String[] teacher = {"Matheus", "Calvetti", "Felipe", "Jonas", "Fernando", "Ruthe"};
+                String[] teacher = {"Matheus", "Calvetti", "Gabriel", "Eloy", "Jonas", "Fernando", "Ruthe"};
                 boolean teacherName = false;
 
                 for (String teach : teacher) {
