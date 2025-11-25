@@ -1,6 +1,6 @@
-
 import java.util.ResourceBundle;
 import javax.swing.JOptionPane;
+import java.io.IOException;
 
 public class QuizApp {
     public static void main(String[] args) {
@@ -10,8 +10,7 @@ public class QuizApp {
 
         // Exibe a tela de login
         GuiUser guiUser = new GuiUser(null, idioma);
-        
-        
+
         String userName = guiUser.getUserName();
         String senha = guiUser.getSenha();
         boolean isTeacher = guiUser.isTeacher();
@@ -23,16 +22,15 @@ public class QuizApp {
 
         // Tenta buscar o usuário com nome e senha
         User user = CrudBD.getUser(userName, senha);
-        //Print do usuário encontrado
-        System.out.println(idioma.getString("login.successful")+ user);
+        System.out.println(idioma.getString("login.successful") + user);
 
         if (user == null) {
             // Verifica se o nome já existe com outra senha
-            User existente = CrudBD.getUser(userName); // Esse método busca só pelo nome
+            User existente = CrudBD.getUser(userName);
             System.out.println(idioma.getString("login.exists") + existente);
             if (existente != null) {
                 JOptionPane.showMessageDialog(null, idioma.getString("error.user.exists"));
-                return; // Encerra o programa ou retorna ao fluxo de login
+                return;
             }
 
             // Nome não existe, então podemos criar novo usuário
@@ -40,17 +38,23 @@ public class QuizApp {
             CrudBD.saveUser(user, senha);
         }
 
-        // Fluxo para professores
+        // Integração do ChatClient
+        ChatClient chatClient = null;
+        try {
+            chatClient = new ChatClient("localhost", 33444, user.getName());
+        } catch (IOException e) {
+            System.out.println("Não foi possível conectar ao servidor de chat: " + e.getMessage());
+        }
+
         if (isTeacher) {
-            JOptionPane.showMessageDialog(null, idioma.getString("welcome.teacher")+" "+user.getName() + "!");
-            new GuiCentralProfessor(idioma);
+            JOptionPane.showMessageDialog(null,
+                    idioma.getString("welcome.teacher") + " " + user.getName() + "!");
+            new GuiCentralProfessor(idioma, chatClient);
             return;
         }
 
-        // Fluxo para alunos
-        JOptionPane.showMessageDialog(null, idioma.getString("welcome.student")+" "+user.getName() + "!");
-        new GuiCentralAluno(user, idioma);
-
-        
+        JOptionPane.showMessageDialog(null,
+                idioma.getString("welcome.student") + " " + user.getName() + "!");
+        new GuiCentralAluno(user, idioma, chatClient);
     }
 }
